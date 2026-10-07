@@ -1,0 +1,43 @@
+# virtual environments (anywhere in the repo)
+.venv/
+.venv-loader/
+**/.venv/
+**/.venv-loader/
+
+# secrets / local config
+.env
+**/.env
+
+# python
+__pycache__/
+**/__pycache__/
+
+# secrets / local config (azd)
+.azure/
+**/.azure/
+
+# generated model artifacts
+*.pkl
+**/model.pkl
+mlflow_model.zip
+**/mlflow_model.zip
+
+# jupyter
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# python build / packaging
+*.pyc
+*.egg-info/
+**/*.egg-info/
+build/
+dist/
+.pytest_cache/
+**/.pytest_cache/
+
+# copilot-agent per-run working dirs (regenerated per run, one per invocation)
+copilot-agent/runs/
+copilot-agent/workspace/
+# mlflow model exports
+**/mlflow_model/
+mlruns/

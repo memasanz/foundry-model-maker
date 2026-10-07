@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+requiredVersions:
+    azd: '>=1.27.1'
+    extensions:
+        azure.ai.agents: '>=1.0.0-beta.9'
+name: copilot-toolbox-trainer
+services:
+    copilot-toolbox-trainer:
+        project: src/copilot-toolbox-trainer
+        host: azure.ai.agent
+        language: python
+        uses:
+            - ai-project
+        env:
+            AZURE_AI_MODEL_DEPLOYMENT_NAME: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+            BYOK_MODEL_ENDPOINT: ${BYOK_MODEL_ENDPOINT}
+            BYOK_TOKEN_SCOPE: ${BYOK_TOKEN_SCOPE}
+            TOOLBOX_ENDPOINT: ${TOOLBOX_ENDPOINT}
+            TOOLBOX_TOKEN_SCOPE: ${TOOLBOX_TOKEN_SCOPE}
+            COPILOT_ALLOWED_PERMISSIONS: ${COPILOT_ALLOWED_PERMISSIONS}
+        docker:
+            path: Dockerfile
+            remoteBuild: true
+        container:
+            resources:
+                cpu: "0.5"
+                memory: 1Gi
+        description: A GitHub Copilot agent, hosted by Foundry, that runs code in a Foundry Toolbox Code Interpreter sandbox to train ML models and export model.pkl + an MLflow model. Inference served by your Foundry project via BYOK + Entra (OAuth).
+        kind: hosted
+        metadata:
+            tags:
+                - Agent Framework
+                - GitHub Copilot
+                - AI Agent Hosting
+                - Azure AI AgentServer
+                - Responses Protocol
+                - BYOK
+                - Foundry Toolbox
+                - Code Interpreter
+        name: copilot-toolbox-trainer
+        protocols:
+            - protocol: responses
+              version: 2.0.0
+    ai-project:
+        host: azure.ai.project
+        deployments:
+            - model:
+                format: OpenAI
+                name: gpt-5.4-mini
+                version: "2026-03-17"
+              name: gpt-5.4-mini
+              sku:
+                capacity: 10
+                name: GlobalStandard
+        endpoint: https://admin-5729-resource.services.ai.azure.com/api/projects/admin-5729
+infra:
+    provider: microsoft.foundry

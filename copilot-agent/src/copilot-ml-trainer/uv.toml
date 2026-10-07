@@ -1,0 +1,11 @@
+# Dependency override for the local (uv-based) `azd ai agent run` path.
+#
+# `agent-framework-github-copilot==1.0.2` hard-pins `github-copilot-sdk==1.0.2`,
+# whose ProviderConfig lacks `bearer_token_provider` (the OAuth callback used for
+# Foundry BYOK). `github-copilot-sdk==1.0.11` adds `bearer_token_provider` and is
+# runtime-compatible with af-github 1.0.2. uv reads this override automatically
+# during `uv pip install`, so no UV_OVERRIDE env var is needed.
+#
+# Remove this override once a version of agent-framework-github-copilot that
+# depends on github-copilot-sdk>=1.0.11 is released.
+override-dependencies = ["github-copilot-sdk==1.0.11"]

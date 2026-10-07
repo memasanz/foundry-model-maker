@@ -1,0 +1,27 @@
+# GitHub Copilot agent provider (drives the Copilot CLI; supports BYOK).
+# NOTE: this pins github-copilot-sdk==1.0.2, which lacks the OAuth
+# `bearer_token_provider`. We override it to github-copilot-sdk==1.0.11 via
+# uv.toml (local/uv path) and an explicit pip install in the Dockerfile
+# (deploy path). Remove both overrides once af-github depends on sdk>=1.0.11.
+agent-framework-github-copilot
+# Foundry hosting: exposes the agent over the Responses protocol.
+agent-framework-foundry-hosting>=1.0.0a260630
+# Microsoft Entra (OAuth) auth for the BYOK bearer-token provider.
+azure-identity
+# .env loading for local runs.
+python-dotenv
+# debugpy enables local debugging of this agent with the Foundry Toolkit VS Code extension.
+debugpy
+
+# --- ML stack the in-container Copilot harness uses to train and export models ---
+# These are installed into the container image so the agent can train immediately
+# without a cold pip install on first request.
+scikit-learn
+pandas
+numpy
+joblib
+mlflow
+xgboost
+lightgbm
+# Excel dataset support (pandas.read_excel).
+openpyxl

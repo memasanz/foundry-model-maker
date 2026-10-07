@@ -1,0 +1,66 @@
+{
+  "task_type": "classification",
+  "library": "scikit-learn",
+  "model": "RandomForest",
+  "target_column": "label",
+  "n_rows": 10,
+  "n_features": 2,
+  "train_rows": 6,
+  "test_rows": 4,
+  "test_size": 0.4,
+  "random_state": 42,
+  "accuracy": 0.5,
+  "f1_macro": 0.3333333333333333,
+  "f1_weighted": 0.3333333333333333,
+  "precision_macro": 0.25,
+  "recall_macro": 0.5,
+  "classes": [
+    "0",
+    "1"
+  ],
+  "candidate_selection": [
+    {
+      "model": "LogisticRegression",
+      "cv_f1_macro": 0.7777777777777778,
+      "cv_f1_macro_std": 0.31426968052735443,
+      "test_f1_macro": 0.7333333333333334,
+      "test_accuracy": 0.75
+    },
+    {
+      "model": "SVC_RBF",
+      "cv_f1_macro": 0.7777777777777778,
+      "cv_f1_macro_std": 0.31426968052735443,
+      "test_f1_macro": 0.7333333333333334,
+      "test_accuracy": 0.75
+    },
+    {
+      "model": "RandomForest",
+      "cv_f1_macro": 1.0,
+      "cv_f1_macro_std": 0.0,
+      "test_f1_macro": 0.3333333333333333,
+      "test_accuracy": 0.5
+    },
+    {
+      "model": "GradientBoosting",
+      "cv_f1_macro": 1.0,
+      "cv_f1_macro_std": 0.0,
+      "test_f1_macro": 0.3333333333333333,
+      "test_accuracy": 0.5
+    },
+    {
+      "model": "GaussianNB",
+      "cv_f1_macro": 0.7777777777777777,
+      "cv_f1_macro_std": 0.3142696805273545,
+      "test_f1_macro": 0.3333333333333333,
+      "test_accuracy": 0.5
+    },
+    {
+      "model": "KNeighbors",
+      "cv_f1_macro": 0.7777777777777778,
+      "cv_f1_macro_std": 0.31426968052735443,
+      "test_f1_macro": 0.7333333333333334,
+      "test_accuracy": 0.75
+    }
+  ],
+  "roc_auc": 0.75
+}
