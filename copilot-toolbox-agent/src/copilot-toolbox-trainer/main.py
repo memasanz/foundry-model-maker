@@ -211,7 +211,10 @@ def main():
         ),
     )
 
-    server = ResponsesHostServer(agent)
+    # history_source="agent": GitHubCopilotAgent is a custom SupportsAgentRun agent, so it
+    # manages its own conversation history. The default "agent_server" expects a RawAgent and
+    # the container crashes at startup (invoke returns HTTP 424 session_not_ready).
+    server = ResponsesHostServer(agent, history_source="agent")
     server.run()
 
 

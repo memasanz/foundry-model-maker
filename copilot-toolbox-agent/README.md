@@ -58,10 +58,11 @@ When the Code Interpreter produces a file and the agent names it, the hosted Res
 adapter emits a native `container_file_citation` annotation (container + file IDs) — the
 path a Responses client uses to download the generated file via the container files API.
 
-> **Scope note (skeleton-first):** this version gets the hosted agent deployable and able
-> to drive the toolbox code interpreter. Streaming a dataset file **in** and downloading
-> the exported `model.pkl` **out** over the Responses protocol (via the
-> `container_file_citation` IDs) is the next iteration.
+> **Scope note:** this version is **deployed and drives the toolbox code interpreter end
+> to end** (BYOK Entra inference + `code_interpreter` execution — verified: Python 3.11.15 /
+> scikit-learn 1.1.3 in the sandbox, model trained and `model.pkl` written). Streaming a
+> dataset file **in** and downloading the exported `model.pkl` **out** over the Responses
+> protocol (via the `container_file_citation` IDs) is the next iteration.
 
 ## Prerequisite: a Toolbox with a Code Interpreter tool
 
@@ -124,11 +125,15 @@ azd env set TOOLBOX_ENDPOINT             "https://admin-5729-resource.services.a
 azd env set TOOLBOX_TOKEN_SCOPE          "https://ai.azure.com/.default"
 azd env set COPILOT_ALLOWED_PERMISSIONS   "mcp,read"
 
-# Reuse the admin-5729 ACR
+# Reuse the admin-5729 ACR (shared with copilot-agent). AZD_FOUNDRY_ACR_MODE=none stops
+# provision from re-creating the ACR's role assignments (otherwise it fails RoleAssignmentExists).
 azd env set AZURE_CONTAINER_REGISTRY_ENDPOINT    "<name>.azurecr.io"
 azd env set AZURE_CONTAINER_REGISTRY_RESOURCE_ID "<ACR_RESOURCE_ID>"
+azd env set AZD_FOUNDRY_ACR_MODE                 "none"
 
 azd provision   # wires FOUNDRY_PROJECT_ENDPOINT for an existing project
+# provision blanks AZURE_CONTAINER_REGISTRY_ENDPOINT (ACR mode none) -> re-set it before deploy:
+azd env set AZURE_CONTAINER_REGISTRY_ENDPOINT    "<name>.azurecr.io"
 azd deploy
 ```
 
@@ -140,7 +145,10 @@ azd deploy
 3. **Per-agent instance identity** (discoverable only **after** the first `azd deploy`):
    - *Cognitive Services OpenAI User* on the account — for model inference (else
      `HTTP 401 … Authentication failed with provider`).
-   - *Azure AI User* on the project — so it can call the **toolbox** MCP endpoint.
+   - *Azure AI User* on the project — so it can call the **toolbox** MCP endpoint. **Note:**
+     this built-in role is now named **"Foundry User"** (role def id
+     `53ca6127-db72-4b80-b1b0-d745d6d5456d`) in current tenants; assign that if "Azure AI
+     User" doesn't resolve.
 
 ```bash
 AGENT_MI=$(az rest --method get \
@@ -151,7 +159,7 @@ az role assignment create --assignee-object-id "$AGENT_MI" \
   --role "Cognitive Services OpenAI User" --scope "<FOUNDRY_ACCOUNT_RESOURCE_ID>"
 az role assignment create --assignee-object-id "$AGENT_MI" \
   --assignee-principal-type ServicePrincipal \
-  --role "Azure AI User" --scope "<FOUNDRY_PROJECT_RESOURCE_ID>"
+  --role "Foundry User" --scope "<FOUNDRY_PROJECT_RESOURCE_ID>"  # formerly "Azure AI User"
 ```
 
 ## Invoke
