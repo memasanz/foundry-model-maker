@@ -22,3 +22,5 @@ a local harness runner, etc.).
 - Trained `model.pkl` artifacts are git-ignored.
 
 > Built with the microsoft-foundry skill. See `AGENTS.md`.
+
+- Maybe a new step: create a cluade agent?  https://devblogs.microsoft.com/agent-framework/build-ai-agents-with-claude-agent-sdk-and-microsoft-agent-framework/
